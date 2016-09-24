@@ -90,13 +90,13 @@ public Response setUsuario(InputStream dadosServ){
         
         JSONObject resposta = new JSONObject(requisicaoFinal.toString());
         Usuario usuario = new Usuario();
-        usuario.setLogin(resposta.getString("nome"));
+        usuario.setLogin(resposta.getString("login"));
         usuario.setNome (resposta.getString("nome"));
         usuario.setSenha(resposta.getInt("senha")+"");
-        usuario.setIdusuario(resposta.getInt("IDUsuario"));
+     //   usuario.setIdusuario(resposta.getInt("IDUsuario"));
         usuario.setIdgrupo(resposta.getInt("IDGrupo"));        
         usuario.setFlagInativo(resposta.getString("FlagInativo").toCharArray()[0]);        
-        usuario.setDtAlteracao(new Date());
+      //  usuario.setDtAlteracao(new Date());
         
         
         new UsuarioController().insereUsuario(usuario);

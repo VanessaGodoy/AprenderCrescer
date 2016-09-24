@@ -79,9 +79,9 @@ public class GrupoDao {
                     + "FROM Grupo");
             while (rs.next()) {
                 grupo = new Grupo();
-                grupo.setIdgrupo(rs.getInt("IDGRUPO"));
-                grupo.setTipousuario(rs.getString("TIPOUSUARIO"));
-                grupo.setDescricaogrupo(rs.getString("DESCRICAOGRUPO"));
+                grupo.setIdgrupo(rs.getInt("idgrupo"));
+                grupo.setTipousuario(rs.getString("tipousuario"));
+                grupo.setDescricaogrupo(rs.getString("descricaogrupo"));
                 
                 lista.add(grupo);
             }
