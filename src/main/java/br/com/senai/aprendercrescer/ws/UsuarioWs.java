@@ -22,22 +22,19 @@ import org.json.JSONObject;
 
 @Path("/usuario")
 public class UsuarioWs {
-    
 
     @GET
     @Path("/getusuario")
     @Produces("application/json")
     public Response getUsuario() {
-
-        JSONObject retorno = new JSONObject();
         try {
-            retorno.put("nome", "Eduardo");
+            JSONObject retorno = new JSONObject();
+            retorno.put("nome", "Caluan Baierle");
             retorno.put("idade", 26);
             return Response.status(200).entity(retorno.toString()).build();
         } catch (JSONException ex) {
             Logger.getLogger(UsuarioWs.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String Resposta = "{'nome':'Eduardo'}";
 
         return Response.status(500).build();
     }
@@ -45,79 +42,81 @@ public class UsuarioWs {
     @GET
     @Path("/getusuarios")
     @Produces("application/json")
-    public Response getAllUsuario() {
+    public Response getAllUsuarios() {
+        // ArrayList<JSONObject> listaJson = new ArrayList<JSONObject>();
+
         try {
-            UsuarioController usuarioControler;
-            usuarioControler = new UsuarioController();
-            ArrayList<Usuario> lista
-                    = usuarioControler.getUsuarios();
-            JSONObject retorno = new JSONObject();
+            UsuarioController ususarioControler;
+            ususarioControler = new UsuarioController();
+            ArrayList<Usuario> lista = ususarioControler.getUsuarios();
+
             JSONObject jUsuario;
+            StringBuilder retorno = new StringBuilder();
+            retorno.append("[");
+            boolean controle = false;
             for (Usuario usuario : lista) {
+                if (controle) {
+                    retorno.append(" , ");
+                }
+
                 jUsuario = new JSONObject();
                 jUsuario.put("idUsuario", usuario.getIdusuario());
+                jUsuario.put("idGrupo", usuario.getIdgrupo());
+                jUsuario.put("login", usuario.getLogin());
+                jUsuario.put("senha", usuario.getSenha());
                 jUsuario.put("nome", usuario.getNome());
-                retorno.put("usuario" + usuario.getIdusuario(), jUsuario.toString());
+                jUsuario.put("flagInativo", usuario.getFlagInativo() + "");
+                retorno.append(jUsuario.toString());
+                controle = true;
             }
+
+            retorno.append("]");
             return Response.status(200).entity(retorno.toString()).build();
         } catch (Exception ex) {
-
             System.out.println("Erro:" + ex);
-
             return Response.status(200).entity(
-                    "{erro:\"" + ex + "\"}").build();
+                    "{erro : \"" + ex + "\"}").build();
+
         }
     }
 
-@POST
-@Path("/setusuario")
-@Consumes(MediaType.APPLICATION_JSON)
-public Response setUsuario(InputStream dadosServ){
-    
-    StringBuilder requisicaoFinal = new StringBuilder();
+    @POST
+    @Path("/setusuario")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("application/json")
+    public Response setUsuario(InputStream dadosServ) {
+        StringBuilder requisicaoFinal = new StringBuilder();
+        String batata = "";
+        try {
+            BufferedReader in
+                    = new BufferedReader(
+                            new InputStreamReader(dadosServ));
+            String requisicao = null;
+            while ((requisicao = in.readLine()) != null) {
+                requisicaoFinal.append(requisicao);
+            }
+            System.out.println(requisicaoFinal.toString());
+
+            JSONObject resposta
+                    = new JSONObject(requisicaoFinal.toString());
+            Usuario usuario = new Usuario();
+
+            usuario.setLogin(resposta.getString("login"));
+            usuario.setNome(resposta.getString("nome"));
+            usuario.setSenha(resposta.getString("senha"));
+            usuario.setIdgrupo(resposta.getInt("idGrupo"));
+            usuario.setFlagInativo(resposta.getString("flagInativo").toCharArray()[0]);
             
-    try{
-        BufferedReader in =
-                new BufferedReader(new InputStreamReader(dadosServ));
-        
-        
-        String requisicao = "";
-        while((requisicao = in.readLine()) != null){
-            requisicaoFinal.append(requisicao);
-            
+            if (new UsuarioController().insereUsuario(usuario)) {
+                Response.status(200).entity("{\"result\" : \"Cadastrado com Sucesso\"}").build();
+            } else {
+                Response.status(200).entity("{\"result\" : \"Erro no Cadastro\"}").build();
+            }
+        } catch (Exception ex) {
+            return Response.status(501).
+                    entity(ex.toString()).build();
         }
-        System.out.println(requisicaoFinal.toString());
-        
-        JSONObject resposta = new JSONObject(requisicaoFinal.toString());
-        Usuario usuario = new Usuario();
-        usuario.setLogin(resposta.getString("login"));
-        usuario.setNome (resposta.getString("nome"));
-        usuario.setSenha(resposta.getInt("senha")+"");
-     //   usuario.setIdusuario(resposta.getInt("IDUsuario"));
-        usuario.setIdgrupo(resposta.getInt("IDGrupo"));        
-        usuario.setFlagInativo(resposta.getString("FlagInativo").toCharArray()[0]);        
-      //  usuario.setDtAlteracao(new Date());
-        
-        
-        new UsuarioController().insereUsuario(usuario);
-        
-        
-        Response.status(200).entity(
-        requisicaoFinal.toString()).build();
-    }catch(Exception ex){
-        return Response.status(501).entity(ex.toString()).build();
+        return null;
     }
-    
-    return null;
-}
-
-
-
-
-
-
-
-
-
 
 }
