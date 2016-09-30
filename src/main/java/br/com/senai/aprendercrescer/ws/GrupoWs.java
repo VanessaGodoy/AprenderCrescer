@@ -1,7 +1,9 @@
 package br.com.senai.aprendercrescer.ws;
 
 import br.com.senai.aprendercrescer.controller.GrupoController;
+import br.com.senai.aprendercrescer.controller.UsuarioController;
 import br.com.senai.aprendercrescer.model.Grupo;
+import br.com.senai.aprendercrescer.model.Usuario;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,22 +23,42 @@ import org.json.JSONObject;
 @Path("/grupo")
 public class GrupoWs {
 
-    @GET
+  @GET
     @Path("/getgrupo")
     @Produces("application/json")
-    public Response getGrupo() {
+    public Response getAllUsuarios() {
+        // ArrayList<JSONObject> listaJson = new ArrayList<JSONObject>();
 
-        JSONObject retorno = new JSONObject();
         try {
-            retorno.put("nome", "Eduardo");
-            retorno.put("idade", 20);
-            return Response.status(200).entity(retorno.toString()).build();
-        } catch (JSONException ex) {
-            Logger.getLogger(GrupoWs.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String Resposta = "{'nome':'Eduardo'}";
+            GrupoController ususarioControler;
+            ususarioControler = new GrupoController();
+            ArrayList<Grupo> lista = ususarioControler.getGrupos();
 
-        return Response.status(500).build();
+            JSONObject jGrupo;
+            StringBuilder retorno = new StringBuilder();
+            retorno.append("[");
+            boolean controle = false;
+            for (Grupo grupo : lista) {
+                if (controle) {
+                    retorno.append(" , ");
+                }
+
+                jGrupo = new JSONObject();
+                jGrupo.put("idGrupo", grupo.getIdgrupo());
+                jGrupo.put("TipoUsuario", grupo.getTipousuario());
+                jGrupo.put("Descricao", grupo.getDescricaogrupo());
+                retorno.append(jGrupo.toString());
+                controle = true;
+            }
+
+            retorno.append("]");
+            return Response.status(200).entity(retorno.toString()).build();
+        } catch (Exception ex) {
+            System.out.println("Erro:" + ex);
+            return Response.status(200).entity(
+                    "{erro : \"" + ex + "\"}").build();
+
+        }
     }
 
     @POST
