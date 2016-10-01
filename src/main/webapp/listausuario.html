@@ -15,44 +15,80 @@ and open the template in the editor.
         <script type="text/javascript" src="js/myApp.js"></script>
         <script type="text/javaScript" src="js/controller/UsuarioController.js"></script>
         <script type="text/javaScript" src="js/factory/UsuarioFactory.js"></script>
-        
-        
+
+
     </head>
     <body ng-controller="UsuarioController"ng-init="buscaUsuarios()">
+        <div ng-hide="editando">
+            <h1> Cadastro </h1>
+        </div>
+        <div ng-show="editando">
+            <h1> Editar </h1>
+        </div>
+
+
+        <form>
+            <div>
+                <label>Nome: </label>
+                <input ng-model="usuario.nome" type="text"
+                       placeholder="Digite seu Nome" >
+            </div>
+            <div>
+                <label>Login: </label>
+                <input ng-model="usuario.long" type="text"
+                       placeholder="Digite seu Login" >
+            </div>
+            <div>
+                <label>Ativo: </label>
+                <input ng-model="usuario.long" type="text" 
+                       placeholder="Digite seu IdGrupo" >
+            </div>
+            <div>
+                <label>idGrupo: </label>
+                <input ng-model="usuario.idGrupo" type="text" 
+                       placeholder="Digite seu Ativo" >  
+            </div>
+            <div>
+                <label>Senha: </label>
+                <input ng-model="usuario.senha" type="text" 
+                       placeholder="Digite seu Ativo" >
+            </div>
+            <div>
+                <button ng-show="editando" type="submit">Salvar</button>
+                <button ng-hide="editando" type="submit">Editar</button>
+            </div>
+        </form>
         <div>
             <h1> lista Usuario </h1>
-                    <div>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>IdUsuario</th>
-                                <th>IdGrupo</th>
-                                <th>Login</th>
-                                <th>Nome</th>
-                                <th>Atvio</th>
-                                <th>Opções</th>
-                                    
-                                    
-                            </thead>
-                            <tboby>
-                                <tr ng-repeat="item in dados">
-                                    <td>{{item.idUsuario}}</td>
-                                    <td>{{item.idGrupo}}</td>
-                                    <td>{{item.login}}</td>
-                                    <td>{{item.nome}}</td>
-                                    <td>{{item.atvio}}</td>
-                                    <td>
-                                        <button>Editar</button>
-                                        <button>Remover</button>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>IdUsuario</th>
+                            <th>IdGrupo</th>
+                            <th>Login</th>
+                            <th>Nome</th>
+                            <th>Atvio</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                    <tboby>
+                        <tr ng-repeat="item in dados">
+                            <td>{{item.idUsuario}}</td>
+                            <td>{{item.idGrupo}}</td>
+                            <td>{{item.login}}</td>
+                            <td>{{item.nome}}</td>
+                            <td>{{item.atvio}}</td>
+                            <td>
+                                <button ng-click="editarUsuario()">Editar</button>
+                                <button>Remover</button>
+                            </td>
+                        </tr>
+                    </tboby>
+                </table>    
+            </div>       
 
-                                    
-                                </tr>
-                            
-                            </tboby>
-                        </table>    
-                    </div>       
-                        
-               
+
         </div>
     </body>
 </html>

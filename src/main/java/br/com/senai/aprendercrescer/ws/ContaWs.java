@@ -6,10 +6,13 @@
 package br.com.senai.aprendercrescer.ws;
 
 import br.com.senai.aprendercrescer.controller.ContaController;
+import br.com.senai.aprendercrescer.controller.GrupoController;
 import br.com.senai.aprendercrescer.model.Conta;
+import br.com.senai.aprendercrescer.model.Grupo;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
@@ -29,23 +32,45 @@ import org.json.JSONObject;
 @Path("/conta")
 public class ContaWs {
 
-    @GET
+  @GET
     @Path("/getconta")
     @Produces("application/json")
-    public Response getConta() {
+    public Response getAllUsuarios() {
+        // ArrayList<JSONObject> listaJson = new ArrayList<JSONObject>();
 
-        JSONObject retorno = new JSONObject();
         try {
-            retorno.put("nome", "Vanessa");
-            retorno.put("idade", 16);
-            return Response.status(200).entity(retorno.toString()).build();
-        } catch (JSONException ex) {
-            Logger.getLogger(GrupoWs.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String Resposta = "{'nome':'Eduardo'}";
+            ContaController ususarioControler;
+            ususarioControler = new ContaController();
+            ArrayList<Conta> lista = ususarioControler.getConta();
 
-        return Response.status(500).build();
+            JSONObject jConta;
+            StringBuilder retorno = new StringBuilder();
+            retorno.append("[");
+            boolean controle = false;
+            for (Conta conta : lista) {
+                if (controle) {
+                    retorno.append(" , ");
+                }
+
+                jConta = new JSONObject();
+                jConta.put("idconta", conta.getIdconta());
+                jConta.put("descricao", conta.getDescricao());
+                jConta.put("tipoconta", conta.getTipoconta());
+                jConta.put("valor", conta.getValor());
+                retorno.append(jConta.toString());
+                controle = true;
+            }
+
+            retorno.append("]");
+            return Response.status(200).entity(retorno.toString()).build();
+        } catch (Exception ex) {
+            System.out.println("Erro:" + ex);
+            return Response.status(200).entity(
+                    "{erro : \"" + ex + "\"}").build();
+
+        }
     }
+
 
     @POST
     @Path("/setconta")
