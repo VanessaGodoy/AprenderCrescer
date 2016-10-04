@@ -30,11 +30,24 @@ myApp.controller('UsuarioController',
             }
             $scope.callbackCadastroUsuario = function(resposta){
                 if (resposta.status != 200){
-                    alert("Deu erro");
+                    swal("Usuario","Erro no cadastro do usuario!","error");
+                    
                 }else{
-                    alert("Ok");
+          
+                    swal("Usuario","Usuario cadastrado com sucesso!", "success");
+                    $scope.buscaUsuarios();
+                    $scope.limpaCampos();
+                    
                 }
-                
+            }
+              $scope.limpaCampos = function(){
+                  $scope.usuario.nome = "nome";
+                  $scope.usuario.login = "login";
+                  $scope.usuario.Ativo = "ativo";
+                  $scope.usuario.idGrupo = "idGrupo";
+                  $scope.usuario.idUsuario = "idUsuario";
+                 
+               
             }
         })
         

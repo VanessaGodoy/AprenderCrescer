@@ -8,11 +8,12 @@ and open the template in the editor.
     <head>
         <title>Lista Usuario</title>
         <meta charset="UTF-8">
-        <meta name="viewport" 
-              content="width=device-width,
-              initial-scale=1.0">
+        <meta name="viewport"  content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="vendor/sweetalert/sweetalert.css">
+        
         <script type="text/javascript" src="vendor/js/angular.min.js"></script>
         <script type="text/javascript" src="js/myApp.js"></script>
+        <script type="text/javaScript" src="vendor/sweetalert/sweetalert.min.js"></script>
         <script type="text/javaScript" src="js/controller/UsuarioController.js"></script>
         <script type="text/javaScript" src="js/factory/UsuarioFactory.js"></script>
 
@@ -27,7 +28,7 @@ and open the template in the editor.
         </div>
 
 
-        <form>
+        <form ng-submit="cadastroUsuario(usuario)">
             <div>
                 <label>Nome: </label>
                 <input ng-model="usuario.nome" type="text"
@@ -35,27 +36,27 @@ and open the template in the editor.
             </div>
             <div>
                 <label>Login: </label>
-                <input ng-model="usuario.long" type="text"
+                <input ng-model="usuario.login" type="text"
                        placeholder="Digite seu Login" >
             </div>
             <div>
                 <label>Ativo: </label>
-                <input ng-model="usuario.long" type="text" 
-                       placeholder="Digite seu IdGrupo" >
+                <input ng-model="usuario.flagInativo" type="text" 
+                       placeholder="Esta ativo?" >
             </div>
             <div>
                 <label>idGrupo: </label>
                 <input ng-model="usuario.idGrupo" type="text" 
-                       placeholder="Digite seu Ativo" >  
+                       placeholder="Digite seu idGrupo" >  
             </div>
             <div>
                 <label>Senha: </label>
-                <input ng-model="usuario.senha" type="text" 
-                       placeholder="Digite seu Ativo" >
+                <input ng-model="usuario.senha" type="password" 
+                       placeholder="Digite sua senha" >
             </div>
             <div>
-                <button ng-show="editando" type="submit">Salvar</button>
-                <button ng-hide="editando" type="submit">Editar</button>
+                <button ng-show="salvar" type="submit">Salvar</button>
+                <button ng-hide="Adicionar" type="submit">Adicionar</button>
             </div>
         </form>
         <div>
@@ -87,8 +88,6 @@ and open the template in the editor.
                     </tboby>
                 </table>    
             </div>       
-
-
         </div>
     </body>
 </html>
