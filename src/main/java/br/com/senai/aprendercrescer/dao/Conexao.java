@@ -12,7 +12,7 @@ public class Conexao {
         if (conexao == null) {
            
                 conexao = DriverManager.getConnection(
-                        "jdbc:postgresql://127.0.0.1:5432/AprenderCrescer",
+                        "jdbc:postgresql://127.0.0.1:5432/aprender_crescer",
                         "postgres",
                         "postgres");
            

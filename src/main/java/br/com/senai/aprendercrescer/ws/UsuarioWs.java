@@ -10,10 +10,13 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.DELETE;
 import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -106,7 +109,7 @@ public class UsuarioWs {
             usuario.setSenha(resposta.getString("senha"));
             usuario.setIdgrupo(resposta.getInt("idGrupo"));
             usuario.setFlagInativo(resposta.getString("flagInativo").toCharArray()[0]);
-            
+
             if (new UsuarioController().insereUsuario(usuario)) {
                 return Response.status(200).entity("{\"result\" : \"Cadastrado com Sucesso\"}").build();
             } else {
@@ -116,7 +119,65 @@ public class UsuarioWs {
             return Response.status(501).
                     entity(ex.toString()).build();
         }
-        
+
     }
 
-}
+    @POST
+    @Path("/updateusuario")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("application/json")
+    public Response updateUsuario(InputStream dadosServ) {
+        StringBuilder requisicaoFinal = new StringBuilder();
+        String batata = "";
+        try {
+            BufferedReader in
+                    = new BufferedReader(
+                            new InputStreamReader(dadosServ));
+            String requisicao = null;
+            while ((requisicao = in.readLine()) != null) {
+                requisicaoFinal.append(requisicao);
+            }
+            System.out.println(requisicaoFinal.toString());
+
+            JSONObject resposta
+                    = new JSONObject(requisicaoFinal.toString());
+            Usuario usuario = new Usuario();
+            usuario.setLogin(resposta.getString("idusuario"));
+            usuario.setLogin(resposta.getString("login"));
+            usuario.setNome(resposta.getString("nome"));
+            usuario.setSenha(resposta.getString("senha"));
+            usuario.setIdgrupo(resposta.getInt("idGrupo"));
+            usuario.setFlagInativo(resposta.getString("flagInativo").toCharArray()[0]);
+
+            if (new UsuarioController().insereUsuario(usuario)) {
+                return Response.status(200).entity("{\"result\" : \"Cadastrado com Sucesso\"}").build();
+            } else {
+                return Response.status(200).entity("{\"result\" : \"Erro no Cadastro\"}").build();
+            }
+        } catch (Exception ex) {
+            return Response.status(501).
+                    entity(ex.toString()).build();
+        }
+    }
+        @DELETE
+        @Path("/deleteusuario/{idusuari}")
+       public Response deleteUsuario(@PathParam("idusuario") int idUsuario){
+         
+        
+        try{
+            if(new UsuarioController().deleteUsuario(idUsuario)){
+                Response.status(200).build();
+            }else{
+                Response.status(400).build();
+            }
+            
+        }catch(Exception ex){
+            return Response.status(400).entity(ex.toString()).build();
+            
+        }
+         return Response.status(200).build();
+
+        }
+
+    }
+

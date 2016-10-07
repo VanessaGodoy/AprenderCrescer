@@ -1,8 +1,9 @@
-
 package br.com.senai.aprendercrescer.dao;
 
-
 import br.com.senai.aprendercrescer.model.Usuario;
+import static java.awt.event.PaintEvent.UPDATE;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,24 +11,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
-
 public class UsuarioDao {
-    
+
     Statement st;
-    
-    public UsuarioDao(){
-        try{
+
+    public UsuarioDao() {
+        try {
             st = Conexao.getConexao().createStatement();
-        } catch (SQLException ex){
-            System.out.println("Erro de conexao"+ ex);
+        } catch (SQLException ex) {
+            System.out.println("Erro de conexao" + ex);
         }
-        
+
     }
-    
-    public Usuario getUsuarioByID(int id){
+
+    public Usuario getUsuarioByID(int id) {
         ResultSet rs;
         Usuario usuario;
-        try{
+        try {
             rs = st.executeQuery("SELECT  IDUSUARIO, IDGRUPO,LOGIN,"
                     + " SENHAUSUARIO, NOMEUSUARIO,DTALTERACAO,"
                     + "FLAGINATIVO FROM USUARIO WHERE IDUSUARIO = " + id);
@@ -96,23 +96,42 @@ public class UsuarioDao {
             System.out.println("Erro de consulta" + ex);
         }
         return lista;
+        
+    }
+    public boolean UpdateUsuario(Usuario usuario){
+        Date data = new Date ();
+        String sql = "UPDATE usuario SET"
+                +"IdUsuario='"+ usuario.getIdusuario() + ", "
+                +"IdGrupo='"+ usuario.getIdgrupo() + "', "
+                +"Login='"+ usuario.getLogin() + "', "
+                +"senhausuario='"+ usuario.getSenha() + ", "
+                +"nomeusuario='"+ usuario.getNome() + "', "
+                +"datalteracao='"+ data + "', "
+                +"flaginativo='"+ usuario.getFlagInativo() + "', "
+                +"WHERE idUsuario='"+ usuario.getIdusuario() + "', ";
+                
+        
+        try {
+            st.executeUpdate(sql);
+         return true;
+
+        } catch (Exception ex) {
+            System.out.println("Problema ao fazer update do usuario: " + ex);
+            JOptionPane.showMessageDialog(null, "Erro:" + ex);
+        }
+        return false;
+
     }
 
     public boolean deleteUsuario(int id) {
         String sql = "DELETE FROM USUARIO WHERE IDUSUARIO = " + id;
         try {
-            st.execute(sql);
+            st.executeUpdate(sql);
             return true;
         } catch (SQLException ex) {
-            System.out.println("Erro Delete: " + ex);
+            System.out.println("Erro no Update: " + ex);
         }
         return false;
     }
 
 }
-    
-    
-    
-    
-    
-    
