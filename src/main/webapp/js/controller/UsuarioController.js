@@ -31,7 +31,7 @@ myApp.controller('UsuarioController',
                 $scope.usuario = angular.copy(item);
             }
             $scope.cadastroUsuario = function (usuario) {
-                if (usuario.idUsuario != 0) {
+                if (usuario.idUsuario && usuario.idUsuario != 0) {
                     UsuarioFactory.updateUsuario($scope.callbackCadastroUsuario, usuario);
                 } else {
                     UsuarioFactory.setUsuario($scope.callbackCadastroUsuario, usuario);
@@ -58,25 +58,24 @@ myApp.controller('UsuarioController',
                 }
             }
             $scope.limpaCampos = function () {
-                $scope.usuario.idUsuario = "";
-                $scope.usuario.nome = "";
-                $scope.usuario.login = "";
-                $scope.usuario.Ativo = "";
-                $scope.usuario.idGrupo = "";
-                $scope.usuario.idUsuario = "";
+                var usuario = {idUsuario: "", nome: "", login: "", flagInativo: "", idGrupo: "", senha: ""
+                }
+                $scope.usuario = usuario;
+                $scope.editando = false;
             }
-            $scope.deleteUsuario = function (id){
-                UsuarioFactory.deleteUsuario($scope.callbackCadastroUsuario,id);
-                
+            $scope.deleteUsuario = function (usuario) {
+                UsuarioFactory.deleteUsuario($scope.callbackCadastroUsuario, usuario);
+
             }
-            $scope.callbackDeleteUsuario = function (resposta){
-                if(resposta.status != 200){
-                    swal("Usuario","Erro ao deletar usuario","error");
-                    
-                }else{
-                    swal("Usuario","Usuario deletado com sucesso","success");
+            $scope.callbackDeleteUsuario = function (resposta) {
+                if (resposta.status != 200) {
+                    swal("Usuario", "Erro ao deletar usuario", "error");
+
+                } else {
+                    swal("Usuario", "Usuario deletado com sucesso", "success");
                     $scope.limpaCampos();
-                    
+                    $scope.buscaUsuario();
+
                 }
             }
         })

@@ -142,7 +142,7 @@ public class UsuarioWs {
             JSONObject resposta
                     = new JSONObject(requisicaoFinal.toString());
             Usuario usuario = new Usuario();
-            usuario.setLogin(resposta.getString("idusuario"));
+            usuario.setIdusuario(resposta.getInt("idUsuario"));
             usuario.setLogin(resposta.getString("login"));
             usuario.setNome(resposta.getString("nome"));
             usuario.setSenha(resposta.getString("senha"));
@@ -159,25 +159,33 @@ public class UsuarioWs {
                     entity(ex.toString()).build();
         }
     }
-        @DELETE
-        @Path("/deleteusuario/{idusuari}")
-       public Response deleteUsuario(@PathParam("idusuario") int idUsuario){
-         
-        
-        try{
-            if(new UsuarioController().deleteUsuario(idUsuario)){
-                Response.status(200).build();
-            }else{
-                Response.status(400).build();
-            }
-            
-        }catch(Exception ex){
-            return Response.status(400).entity(ex.toString()).build();
-            
-        }
-         return Response.status(200).build();
 
+    @DELETE
+    @Path("/deleteusuario")
+    @Produces("application/json")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteUsuario(InputStream dadosServ) {
+        StringBuilder requisicaoFinal = new StringBuilder();
+
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(dadosServ));
+            String requisicao = null;
+            while ((requisicao = in.readLine()) != null) {
+                requisicaoFinal.append(requisicao);
+            }
+            System.out.println(requisicaoFinal.toString());
+            JSONObject resposta = new JSONObject(requisicaoFinal.toString());
+            System.out.println("" + resposta.getInt("idUsuario"));
+            int idUsuario = resposta.getInt("idUsuario");
+            if (new UsuarioController().deleteUsuario(idUsuario)) {
+                return Response.status(200).entity("{\"result\" : \"Sucesso\"}").build();
+            } else {
+                return Response.status(500).entity("{\"result\" : \"Error\"}").build();
+            }
+        } catch (Exception ex) {
+            return Response.status(500).entity(ex.toString()).build();
         }
 
     }
 
+}

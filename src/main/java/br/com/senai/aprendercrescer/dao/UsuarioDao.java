@@ -83,7 +83,7 @@ public class UsuarioDao {
         try {
             rs = st.executeQuery("SELECT  IDUSUARIO, IDGRUPO,LOGIN,"
                     + " SENHAUSUARIO, NOMEUSUARIO,DTALTERACAO,"
-                    + "FLAGINATIVO FROM USUARIO ");
+                    + "FLAGINATIVO FROM USUARIO ORDER BY IDUSUARIO ");
             while (rs.next()) {
                 usuario = new Usuario();
                 usuario.setIdusuario(rs.getInt("IDUSUARIO"));
@@ -96,24 +96,25 @@ public class UsuarioDao {
             System.out.println("Erro de consulta" + ex);
         }
         return lista;
-        
+
     }
-    public boolean UpdateUsuario(Usuario usuario){
-        Date data = new Date ();
-        String sql = "UPDATE usuario SET"
-                +"IdUsuario='"+ usuario.getIdusuario() + ", "
-                +"IdGrupo='"+ usuario.getIdgrupo() + "', "
-                +"Login='"+ usuario.getLogin() + "', "
-                +"senhausuario='"+ usuario.getSenha() + ", "
-                +"nomeusuario='"+ usuario.getNome() + "', "
-                +"datalteracao='"+ data + "', "
-                +"flaginativo='"+ usuario.getFlagInativo() + "', "
-                +"WHERE idUsuario='"+ usuario.getIdusuario() + "', ";
-                
-        
+
+    public boolean UpdateUsuario(Usuario usuario) {
+        Date data = new Date();
+        String sql = "UPDATE usuario SET "
+                + "IdUsuario=" + usuario.getIdusuario() + ", "
+                + "IdGrupo=" + usuario.getIdgrupo() + ", "
+                + "Login='" + usuario.getLogin() + "', "
+                + "senhausuario='" + usuario.getSenha() + "', "
+                + "nomeusuario='" + usuario.getNome() + "' "
+             //   + "datalteracao='" + data + "', "
+             //   + "flaginativo='" + usuario.getFlagInativo() + "', "
+                + "WHERE idUsuario=" + usuario.getIdusuario();
+
         try {
+            System.out.println(sql+"");
             st.executeUpdate(sql);
-         return true;
+            return true;
 
         } catch (Exception ex) {
             System.out.println("Problema ao fazer update do usuario: " + ex);

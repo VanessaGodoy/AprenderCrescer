@@ -10,7 +10,8 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport"  content="width=device-width,initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="vendor/sweetalert/sweetalert.css">
-        
+        <script type="text/javaScript" src="js/vendor/bootstrap/js/bootstrap.js"></script>
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.css">
         <script type="text/javascript" src="vendor/js/angular.min.js"></script>
         <script type="text/javascript" src="js/myApp.js"></script>
         <script type="text/javaScript" src="vendor/sweetalert/sweetalert.min.js"></script>
@@ -18,76 +19,85 @@ and open the template in the editor.
         <script type="text/javaScript" src="js/factory/UsuarioFactory.js"></script>
 
 
+
     </head>
     <body ng-controller="UsuarioController"ng-init="buscaUsuarios()">
-        <div ng-hide="editando">
-            <h1> Cadastro </h1>
-        </div>
-        <div ng-show="editando">
-            <h1> Editar </h1>
-        </div>
-
-
-        <form ng-submit="cadastroUsuario(usuario)">
-            <div>
-                <label>Nome: </label>
-                <input ng-model="usuario.nome" type="text"
-                       placeholder="Digite seu Nome" >
+        <div class="container">
+            <div class="row">
+                <div ng-hide="editando" class="col-xs-12">
+                    <h1> Cadastro </h1>
+                </div>
+                <div ng-show="editando" class="col-xs-12">
+                    <h1> Editar </h1>
+                </div>
             </div>
-            <div>
-                <label>Login: </label>
-                <input ng-model="usuario.login" type="text"
-                       placeholder="Digite seu Login" >
+            <div class="row">
+                <div class=" col-xs-3">
+                    <form ng-submit="cadastroUsuario(usuario)">
+                        <div class="form-group">
+                            <label class="control-label">Nome: </label>
+                            <input class="form-control" ng-model="usuario.nome" type="text"
+                                   placeholder="Digite seu Nome" >
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Login: </label>
+                            <input class="form-control" ng-model="usuario.login" type="text"
+                                   placeholder="Digite seu Login" >
+                        </div>
+                        <div class="form-group"> 
+                            <label class="control-label">Ativo: </label>
+                            <input class="form-control" ng-model="usuario.flagInativo" type="text" 
+                                   placeholder="Esta ativo?" >
+                        </div>
+                        <div class="form-group"> 
+                            <label class="control-label">idGrupo: </label>
+                            <input class="form-control" ng-model="usuario.idGrupo" type="text" 
+                                   placeholder="Digite seu idGrupo" >  
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Senha: </label>
+                            <input class="form-control" ng-model="usuario.senha" type="password" 
+                                   placeholder="Digite sua senha" >
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary" ng-show="editando" type="submit">Salvar</button>
+                            <button class="btn btn-primary" ng-hide="editando" type="submit">Adicionar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-9">
+                    <div>
+                        <h1> lista Usuario </h1>
+                        <div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>IdUsuario</th>
+                                        <th>IdGrupo</th>
+                                        <th>Login</th>
+                                        <th>Nome</th>
+                                        <th>Atvio</th>
+                                        <th>Opções</th>
+                                    </tr>
+                                </thead>
+                                <tboby>
+                                    <tr ng-repeat="item in dados">
+                                        <td>{{item.idUsuario}}</td>
+                                        <td>{{item.idGrupo}}</td>
+                                        <td>{{item.login}}</td>
+                                        <td>{{item.nome}}</td>
+                                        <td>{{item.atvio}}</td>
+                                        <td>
+                                            <button ng-click="deleteUsuario(item)">Remover</button>
+                                            <button ng-click="editarUsuario(item)">Editar</button>
+                                        </td>
+                                    </tr>
+                                </tboby>
+                            </table>    
+                        </div>   
+                    </div>
+                </div>
             </div>
-            <div>
-                <label>Ativo: </label>
-                <input ng-model="usuario.flagInativo" type="text" 
-                       placeholder="Esta ativo?" >
-            </div>
-            <div>
-                <label>idGrupo: </label>
-                <input ng-model="usuario.idGrupo" type="text" 
-                       placeholder="Digite seu idGrupo" >  
-            </div>
-            <div>
-                <label>Senha: </label>
-                <input ng-model="usuario.senha" type="password" 
-                       placeholder="Digite sua senha" >
-            </div>
-            <div>
-                <button ng-show="editando" type="submit">Salvar</button>
-                <button ng-hide="editando" type="submit">Adicionar</button>
-            </div>
-        </form>
-        <div>
-            <h1> lista Usuario </h1>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>IdUsuario</th>
-                            <th>IdGrupo</th>
-                            <th>Login</th>
-                            <th>Nome</th>
-                            <th>Atvio</th>
-                            <th>Opções</th>
-                        </tr>
-                    </thead>
-                    <tboby>
-                        <tr ng-repeat="item in dados">
-                            <td>{{item.idUsuario}}</td>
-                            <td>{{item.idGrupo}}</td>
-                            <td>{{item.login}}</td>
-                            <td>{{item.nome}}</td>
-                            <td>{{item.atvio}}</td>
-                            <td>
-                                <button ng-click="deleteUsuario(item.idUsuario)">Remover</button>
-                                <button ng-click="editandoUsuario(item)">Editar</button>
-                            </td>
-                        </tr>
-                    </tboby>
-                </table>    
-            </div>       
         </div>
     </body>
 </html>
